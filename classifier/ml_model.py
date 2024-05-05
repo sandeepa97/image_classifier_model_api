@@ -45,10 +45,9 @@ def train_model(model, X_train, y_train, datagen, X_val, y_val, batch_size=32, e
 def evaluate_model(model, X_test, y_test):
     probabilities = model.predict(X_test)
     predictions = (probabilities > 0.5).astype('int32')
-    print('\nClassification Report:')
-    print(classification_report(y_test, predictions))
-    print('\nConfusion Matrix:')
-    print(confusion_matrix(y_test, predictions))
+    report = classification_report(y_test, predictions)
+    matrix = confusion_matrix(y_test, predictions)
+    return report, matrix
 
 if __name__ == "__main__":
     file_path = 'C:/Users/perer/.medmnist/pneumoniamnist_128.npz'
@@ -67,4 +66,8 @@ if __name__ == "__main__":
     datagen.fit(X_train)
     model = create_model(X_train.shape[1:])
     history = train_model(model, X_train, y_train, datagen, X_val, y_val)
-    evaluate_model(model, X_test, y_test)
+    report, matrix = evaluate_model(model, X_test, y_test)
+    print('\nClassification Report:')
+    print(report)
+    print('\nConfusion Matrix:')
+    print(matrix)
